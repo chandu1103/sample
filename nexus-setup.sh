@@ -34,4 +34,4 @@ systemctl daemon-reload
 systemctl start nexus
 systemctl enable nexus
 
-echo updated
+echo updated on 30
