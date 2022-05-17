@@ -30,7 +30,7 @@ pipeline {
              steps {
                  script{
                     sh '''
-                      sed '/allowed_hosts/d' /etc/nagios/nrpe.cfg
+                      sed '/allowed_hosts/d' nrpe.cfg
 
                       cat << EOF >>  nrpe.cfg
                       allowed_hosts= $PRIVATE_IP
