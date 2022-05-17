@@ -23,8 +23,9 @@ pipeline {
                                          }      
                         }
                    }
-             } 
-         stage(inventory_file_updating){
+             }
+        
+         stage (inventory_file_updating) {
               steps{
                   script{
                          try {
