@@ -35,6 +35,7 @@ pipeline {
                       sed '/allowed_hosts/d' nrpe.cfg
 
                       cat << EOF >>  nrpe.cfg
+                      # adding allowed hosts
                       allowed_hosts= $PRIVATE_IP
                        '''
                 }
