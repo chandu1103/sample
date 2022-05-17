@@ -32,7 +32,7 @@ pipeline {
                          def autoCancelled = false
                     try{
                         input message: 'DO YOU WANT TO INSTALL DOCKER (yes/no)'
-                        ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'docker.yaml'
+                        ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'basic_tools/docker.yaml'
                         }
                         catch (e) {
                                     if (autoCancelled) {
@@ -50,7 +50,7 @@ pipeline {
                          def autoCancelled = false
                     try{
                         input message: 'DO YOU WANT TO INSTALL PHP (yes/no)'
-                        ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'php.yaml'
+                        ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'basic_tools/php.yaml'
                         }
                         catch (e) {
                                     if (autoCancelled) {
@@ -68,7 +68,7 @@ pipeline {
                          def autoCancelled = false
                     try{
                         input message: 'DO YOU WANT TO INSTALL NODE (yes/no)'
-                        ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'node.yaml'
+                        ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'basic_tools/node.yaml'
                         }
                         catch (e) {
                                     if (autoCancelled) {
@@ -86,7 +86,7 @@ pipeline {
                          def autoCancelled = false
                     try{
                         input message: 'DO YOU WANT TO INSTALL NGNIX (yes/no)'
-                        ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'ngnix.yaml'
+                        ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'basic_tools/ngnix.yaml'
                         }
                         catch (e) {
                                     if (autoCancelled) {
@@ -99,7 +99,4 @@ pipeline {
                 }
             }
      }
-
 }
-
-    
