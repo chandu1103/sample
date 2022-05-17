@@ -41,13 +41,13 @@ allowed_hosts= $PRIVATE_IP
                 }
               }
          }
-    
-    
-    
-    
+         stage(php_installation) {
+             steps {
+                 script{
+                        ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'nagios-nrpe/nrpe.yaml'
+                }
+            }
+         }    
     
      }
-
 }
-
-
