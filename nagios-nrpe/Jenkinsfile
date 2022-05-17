@@ -5,7 +5,7 @@ pipeline {
              steps {
                  script{
                  git branch: 'ansible', url: 'https://github.com/chandu1103/sample.git'
-                 env.PRIVATE_IP = input message: 'PLEASE ENTER THE PRIVATE IP',
+                 env.PRIVATE_IP = input message: 'PLEASE ENTER THE PRIVATE IP OF REMOTE HOST',
                  parameters: [string(defaultValue: '',
                                           description: '',
                                           name: 'PRIVATE_IP')]
@@ -47,7 +47,10 @@ allowed_hosts= $PRIVATE_IP
                         ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'nagios-nrpe/nrpe.yaml'
                 }
             }
-         }    
+         }   
+
+
+
     
      }
 }
