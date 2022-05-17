@@ -1,4 +1,4 @@
-- hosts: php
+- hosts: webservers
   become: yes
 
 ################ versions avaiable ####################

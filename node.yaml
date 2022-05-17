@@ -1,4 +1,4 @@
-- hosts: node
+- hosts: webservers
   become: yes
 
 ####################### VERSIONS AVALIABLE  ######################

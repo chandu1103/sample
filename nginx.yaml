@@ -1,4 +1,4 @@
-- hosts: nginx
+- hosts: webservers
   become: yes
   tasks:
 
