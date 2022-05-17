@@ -1,6 +1,6 @@
 [webservers]
-$IP 
+$PRIVATE_IP 
 
 
 [all:vars]
-
+ansible_user: ubuntu
