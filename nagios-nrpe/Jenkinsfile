@@ -32,7 +32,7 @@ pipeline {
                  script{
                     sh '''
                        cd nagios-nrpe
-                      sed '/allowed_hosts/d' nrpe.cfg
+                      sed -i '/allowed_hosts/d' nrpe.cfg
 
                       cat << EOF >>  nrpe.cfg
                       \n # adding allowed hosts
@@ -41,6 +41,11 @@ allowed_hosts= $PRIVATE_IP
                 }
               }
          }
+    
+    
+    
+    
+    
      }
 
 }
