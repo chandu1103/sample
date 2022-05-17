@@ -1,0 +1,38 @@
+- hosts: nginx
+  become: yes
+  tasks:
+
+#########################  UPDATE-SERVER  ######################
+  - name: updating the remote host
+    apt:
+       update_cache: yes
+       upgrade: 'yes'
+
+
+###################### INSTALLING NGINX-SERVER ##################
+  - name: installing nginx-server
+    apt:
+      name: nginx
+      state: present
+
+####################### UFW ENABLED ########################
+  - name: ufw allow Nginx HTTP
+    ufw:
+       state: enabled
+       policy: allow
+
+
+
+####################### UFW ALLOWING ########################
+  - name: ufw allow Nginx HTTP
+    ufw:
+       rule: allow
+       name: 'Nginx HTTP'
+
+######################### RESTARTING NGINX-SERVICE  ######################
+  - name: updating the remote host
+    service:
+       name: nginx
+       state: restarted
+       enabled: yes
+

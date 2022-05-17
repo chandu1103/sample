@@ -1,0 +1,41 @@
+- hosts: node
+  become: yes
+
+####################### VERSIONS AVALIABLE  ######################
+
+# 10.x   11.x      12.x     13.x      14.x   15.x 
+  vars:
+    VERSION: "15.x"
+  tasks:
+
+#########################  UPDATE-SERVER  ######################
+  - name: updating the remote host
+    apt:
+       update_cache: yes
+       upgrade: 'yes'
+
+######################### INSTALLING DEPENDENCIES  ######################
+  - name: updating the remote host
+    apt:
+      name: curl
+      state: present
+
+
+###################### ADDING GPG KEY  ##############
+  - name: Adding gpg key
+    apt_key:
+      url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+      state: present
+
+###################### ADDING REPOSITORIES  ##############
+  - name: Adding repositories
+    shell: curl -sL https://deb.nodesource.com/setup_{{ VERSION }}  | sudo -E bash -
+
+
+
+#####################  INSTALLING NODEJS #################
+  - name: installing nodejs
+    apt:
+      name: nodejs
+      state: present
+

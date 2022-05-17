@@ -1,0 +1,56 @@
+- hosts: docker
+  become: yes
+  tasks:
+#########################  UPDATE-SERVER  ######################
+  - name: updating the remote host
+    apt:
+       update_cache: yes
+       upgrade: 'yes'
+    when: ansible_distribution == "Ubuntu"
+
+###################### INSTALLING DEPENDENCIES ##################
+  - name: installing dependencies
+    apt:
+      name: "{{item}}"
+      state: present
+    loop:
+      - apt-transport-https
+      - ca-certificates
+      - software-properties-common
+      - curl
+
+###################### ADDING GPG KEY ###########################
+  - name: adding gpg key
+    apt_key:
+       url: https://download.docker.com/linux/ubuntu/gpg
+       state: present
+
+
+####################### ADDING REPOSITORY ########################
+  - name : adding repository
+    apt_repository:
+       repo: deb https://download.docker.com/linux/ubuntu bionic stable
+       state: present
+
+
+
+###################### INSTALLING DOCKER ########################
+  - name: installing docker
+    apt:
+       name: "{{item}}"
+       state: present
+    loop:
+       - docker-ce
+       - docker-ce-cli
+       - containerd.io
+
+
+
+###################### STARTING AND ENABLING DOCKER #############
+  - name: starting and enabling docker
+    service:
+       name: docker
+       state: started
+       enabled: yes
+
+

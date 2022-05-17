@@ -1,0 +1,10 @@
+- hosts: users
+  become: yes
+  tasks:
+  - name: Create a User.
+    user:
+      name: client-2
+      shell: /bin/bash
+      state: present
+      password: 123
+

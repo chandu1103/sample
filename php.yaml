@@ -1,0 +1,72 @@
+- hosts: php
+  become: yes
+
+################ versions avaiable ####################
+# 7.4     7.3      7.2     7.1      7.0       5.6
+  vars:
+     VERSION: "7.4"
+  tasks:
+
+#########################  UPDATE-SERVER  ######################
+  - name: updating the remote host
+    apt:
+       update_cache: yes
+       upgrade: 'yes'
+
+
+###################### INSTALLING DEPENDENCIES ##################
+  - name: installing dependencies
+    apt:
+      name: "{{item}}"
+      state: present
+    loop:
+      - apt-transport-https
+      - ca-certificates
+      - software-properties-common
+      - lsb-release
+      - libgs-dev
+
+
+####################### ADDING REPOSITORY ########################
+  - name : adding repository
+    apt_repository:
+       repo: ppa:ondrej/php
+       state: present
+
+#########################  UPDATE-SERVER  ######################
+  - name: updating the remote host
+    apt:
+       update_cache: yes
+
+
+###################### INSTALLING PHP ########################
+  - name: installing php
+    apt:
+       name: php{{ VERSION }}
+       state: present
+
+
+###################### INSTALLING PHP PACKAGES  ##############
+  - name: installinG php-packages
+    apt:
+      name: "{{item}}"
+      state: present
+    loop:
+     - php{{ VERSION }}-cli
+     - php{{ VERSION }}-json
+     - php{{ VERSION }}-common
+     - php{{ VERSION }}-mysql
+     - php{{ VERSION }}-zip
+     - php{{ VERSION }}-mbstring
+     - php{{ VERSION }}-curl
+     - php{{ VERSION }}-xml
+     - php{{ VERSION }}-bcmath
+     - libapache2-mod-php
+
+
+##################### RESTARTING APACHE2 SERVER ##################
+  - name: restarting apache2 server
+    service:
+       name: apache2
+       state: restarted
+
