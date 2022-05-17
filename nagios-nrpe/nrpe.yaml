@@ -1,0 +1,39 @@
+- hosts: webservers
+  become: yes
+  gather_facts: True
+  tasks:
+
+######################### UPDATE-SERVER ######################
+    - name: updating the remote host
+      apt:
+        update_cache: yes
+        upgrade: 'yes'
+      when: ansible_distribution == "Ubuntu"
+####################### INSTALL NAGIOS-NRPE-SERVER ############
+    - name: installing nagios-nrpe-server
+      apt:
+        name: nagios-nrpe-server
+        state: latest
+###################### INSTALL NAGIOS-PLUGINS ##################
+    - name: installing nagios-plugins
+      apt:
+        name: nagios-plugins
+        state: latest
+###################### CONFIGURE NAGIOS-NRPE-SERVER ##############
+    - name: updating nrpe.cfg
+      copy:
+        src: nrpe.cfg
+        dest: /etc/nagios/nrpe.cfg
+##################### CONFIGURE FREESPACE CHECKING PLUGIN ########
+    - name: adding check_disk_ex file & changing file permissions
+      copy:
+        src: check_disk_ex
+        dest: /usr/lib/nagios/plugins/check_disk_ex
+        owner: root
+        group: root
+        mode: 0755
+##################### RESTART NAGIOS-NRPE-SERVICE #################
+    - name: restarting nagios-nrpe-service
+      service:
+        name: nagios-nrpe-server
+        state: restarted
