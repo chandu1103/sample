@@ -15,6 +15,7 @@ pipeline {
           stage(inventory_file_updating){
               steps{
                   script{
+                    sh 'cd nagios-nrpe'
                     sh '''
                        cat << EOF > inventory
                        [webservers]
@@ -30,6 +31,7 @@ pipeline {
              steps {
                  script{
                     sh '''
+                       cd nagios-nrpe
                       sed '/allowed_hosts/d' nrpe.cfg
 
                       cat << EOF >>  nrpe.cfg
