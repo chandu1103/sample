@@ -13,7 +13,7 @@
   - name: Stoping apache2 service
     service:
        name: apache2
-       state: stop
+       state: stopped
 
 
 ###################### INSTALLING NGINX-SERVER ##################
