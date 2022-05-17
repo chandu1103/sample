@@ -9,6 +9,13 @@
        upgrade: 'yes'
 
 
+######################### STOPING APACHE2-SERVICE  ######################
+  - name: Stoping apache2 service
+    service:
+       name: apache2
+       state: stop
+
+
 ###################### INSTALLING NGINX-SERVER ##################
   - name: installing nginx-server
     apt:
