@@ -36,7 +36,7 @@ pipeline {
 
                       cat << EOF >>  nrpe.cfg
                       \n # adding allowed hosts
-                      allowed_hosts= $PRIVATE_IP
+allowed_hosts= $PRIVATE_IP
                        '''
                 }
               }
