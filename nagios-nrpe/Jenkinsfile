@@ -1,0 +1,45 @@
+pipeline {
+     agent any
+     stages {
+         stage (cloning) {
+             steps {
+                 script{
+                 git branch: 'ansible', url: 'https://github.com/chandu1103/sample.git'
+                 env.PRIVATE_IP = input message: 'PLEASE ENTER THE PRIVATE IP',
+                 parameters: [string(defaultValue: '',
+                                          description: '',
+                                          name: 'PRIVATE_IP')]
+                }
+             }
+         }
+          stage(inventory_file_updating){
+              steps{
+                  script{
+                    sh '''
+                       cat << EOF > inventory
+                       [webservers]
+                       $PRIVATE_IP
+
+                       [all:vars]
+                       ansible_user: ubuntu
+                     '''
+                  }
+              }
+          }
+          stage(updating_nrpe.cfg_file) {
+             steps {
+                 script{
+                    sh '''
+                      sed '/allowed_hosts/d' /etc/nagios/nrpe.cfg
+
+                      cat << EOF >>  nrpe.cfg
+                      allowed_hosts= $PRIVATE_IP
+                       '''
+                }
+              }
+         }
+     }
+
+}
+
+

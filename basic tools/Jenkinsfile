@@ -1,0 +1,105 @@
+pipeline {
+     agent any
+     stages {
+         stage (cloning) {
+             steps {
+                 script{
+                 git branch: 'ansible', url: 'https://github.com/chandu1103/sample.git'
+                 env.PRIVATE_IP = input message: 'PLEASE ENTER THE PRIVATE IP',
+                 parameters: [string(defaultValue: '',
+                                          description: '',
+                                          name: 'PRIVATE_IP')]
+                }
+             }
+         }
+          stage(inventory_file_updating){
+              steps{
+                  script{
+                    sh '''
+                       cat << EOF > inventory
+                       [webservers]
+                       $PRIVATE_IP
+
+                       [all:vars]
+                       ansible_user: ubuntu
+                     '''
+                    }
+                }
+            }
+            stage(docker_installation) {
+             steps {
+                 script{
+                         def autoCancelled = false
+                    try{
+                        input message: 'DO YOU WANT TO INSTALL DOCKER (yes/no)'
+                        ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'docker.yaml'
+                        }
+                        catch (e) {
+                                    if (autoCancelled) {
+                                                        currentBuild.result = 'ABORTED'
+                                                        echo "DOCKER NOT INSTALLED"
+                                                           return
+                                                        }
+                                   }
+                    }
+                }
+            }
+            stage(php_installation) {
+             steps {
+                 script{
+                         def autoCancelled = false
+                    try{
+                        input message: 'DO YOU WANT TO INSTALL PHP (yes/no)'
+                        ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'php.yaml'
+                        }
+                        catch (e) {
+                                    if (autoCancelled) {
+                                                        currentBuild.result = 'ABORTED'
+                                                        echo "PHP NOT INSTALLED"
+                                                           return
+                                                        }
+                                   }
+                    }
+                }
+            }
+            stage(node_installation) {
+             steps {
+                 script{
+                         def autoCancelled = false
+                    try{
+                        input message: 'DO YOU WANT TO INSTALL NODE (yes/no)'
+                        ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'node.yaml'
+                        }
+                        catch (e) {
+                                    if (autoCancelled) {
+                                                        currentBuild.result = 'ABORTED'
+                                                        echo "NODE NOT INSTALLED"
+                                                           return
+                                                        }
+                                   }
+                    }
+                }
+            }
+            stage(ngnix_installation) {
+             steps {
+                 script{
+                         def autoCancelled = false
+                    try{
+                        input message: 'DO YOU WANT TO INSTALL NGNIX (yes/no)'
+                        ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'ngnix.yaml'
+                        }
+                        catch (e) {
+                                    if (autoCancelled) {
+                                                        currentBuild.result = 'ABORTED'
+                                                        echo "NGINX NOT INSTALLED"
+                                                           return
+                                                        }
+                                   }
+                    }
+                }
+            }
+     }
+
+}
+
+    
