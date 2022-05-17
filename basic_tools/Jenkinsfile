@@ -23,9 +23,8 @@ pipeline {
                                          }      
                         }
                    }
-             }
-        
-         stage (inventory_file_updating) {
+         }
+          stage (inventory_file_updating) {
               steps{
                   script{
                          try {
@@ -45,8 +44,10 @@ pipeline {
                                         currentBuild.result = 'FAILURE'
                                         throw e
                                          }  
-                }
-            }
+                   }
+              }
+
+          }
             stage(docker_installation) {
              steps {
                  script{
@@ -117,4 +118,3 @@ pipeline {
             }
         }
    }
-}
