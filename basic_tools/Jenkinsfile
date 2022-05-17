@@ -1,8 +1,5 @@
 pipeline {
      agent any
-     parameters {
-                 gitParameter branchFilter: 'origin/(.*)', defaultValue: 'main', name: 'Branch', type: 'PT_BRANCH'
-               }
      stages {
          stage (cloning) {
              steps {
