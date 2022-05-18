@@ -1,0 +1,56 @@
+pipeline {
+     agent any
+     stages {
+         stage (cloning) {
+             steps {
+                 script{
+                 git branch: 'ansible', url: 'https://github.com/chandu1103/sample.git'
+                 env.PRIVATE_IP = input message: 'PLEASE ENTER THE PRIVATE IP OF REMOTE HOST',
+                 parameters: [string(defaultValue: '',
+                                          description: '',
+                                          name: 'PRIVATE_IP')]
+                }
+             }
+         }
+          stage(inventory_file_updating){
+              steps{
+                  script{
+                    sh 'cd nagios-nrpe'
+                    sh '''
+                       cat << EOF > inventory
+                       [webservers]
+                       $PRIVATE_IP
+
+                       [all:vars]
+                       ansible_user: ubuntu
+                     '''
+                  }
+              }
+          }
+          stage( updating_nrpe_cfg_file ){
+             steps {
+                 script{
+                    sh '''
+                       cd nagios-nrpe
+                      sed -i '/allowed_hosts/d' nrpe.cfg
+
+                      cat << EOF >>  nrpe.cfg
+                      \n # adding allowed hosts
+allowed_hosts= $PRIVATE_IP
+                       '''
+                }
+              }
+         }
+         stage(php_installation) {
+             steps {
+                 script{
+                        ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'nagios-nrpe/nrpe.yaml'
+                }
+            }
+         }   
+
+
+
+    
+     }
+}
