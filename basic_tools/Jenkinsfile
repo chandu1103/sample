@@ -12,8 +12,7 @@ pipeline {
                     def cause = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
                     slackSend (botUser: true, color: 'good', message: "Cloning the Project- nodejs-Branch-${Branch}: Job '${env.JOB_NAME} ${cause.userName} [${env.BUILD_NUMBER}]'" , channel: "test", teamDomain: 'chandu1607', tokenCredentialId: 'slack')
                     echo "flag: ${params.Branch}"
-                    git branch: "${params.Branch}", url: 'https://github.com/chandu1103/sample.git'
-                   // git branch: 'ansible', url: 'https://github.com/chandu1103/sample.git'
+                    git branch: "${params.Branch}",  url: 'https://github.com/chandu1103/sample.git'
                    }
                 catch(Exception e){
                     echo "FAILED ${e}"
@@ -109,29 +108,7 @@ pipeline {
                           slackSend(botUser: true, channel: 'test', color: 'warning', message: '"Failed to install NGNIX"', teamDomain: 'chandu1607', tokenCredentialId: 'slack')
                          }
                     }
-                      }
-                   }
-
-
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                }
-
-
+               }
+            } 
+        }
     }
