@@ -51,7 +51,7 @@ pipeline {
     stage(docker_installation) {
         steps {
             script{
-                    if( env.PRIVATE_IP == "true" ) {
+                    if( env.DOCKER_INPUT == "true" ) {
                     ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'basic_tools/docker.yaml'
                             slackSend(botUser: true, channel: 'test', color: 'good', message: '"SUCCESSFULLY INSTALLED DOCKER"' , teamDomain: 'chandu1607', tokenCredentialId: 'slack')
                             }
