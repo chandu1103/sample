@@ -29,9 +29,8 @@ pipeline {
             script{
                 try {
                     echo "${PRIVATE_IP}"
-                    sh 'cd basic_tools'
                     sh '''
-                    cat << EOF > inventory
+                    cat << EOF > basic_tools/inventory
                     [webservers]
                     ${PRIVATE_IP}
 
