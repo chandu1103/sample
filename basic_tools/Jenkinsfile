@@ -28,8 +28,8 @@ pipeline {
         steps{
             script{
                 try {
+                    sh 'cd basic_tools'
                     sh '''
-                    cd basic_tools
                     cat << EOF > inventory
                     [webservers]
                     ${PRIVATE_IP}
