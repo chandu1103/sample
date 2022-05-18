@@ -1,0 +1,117 @@
+pipeline {
+     agent any
+     stages {
+         stage (cloning) {
+             steps {
+                 script{
+                        try {
+                            def cause = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
+                            slackSend (botUser: true, color: 'warning', message: "Cloning the Project- basic tools-Branch-${Branch}: Job '${env.JOB_NAME} ${cause.userName} [${env.BUILD_NUMBER}]' " , channel: "test", teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                            echo "flag: ${params.Branch}"
+                            git branch: 'ansible', url: 'https://github.com/chandu1103/sample.git'
+                            env.PRIVATE_IP = input message: 'PLEASE ENTER THE PRIVATE IP',
+                            parameters: [string(defaultValue: '', description: '', name: 'PRIVATE_IP')]
+                            }
+                        catch(Exception e){
+                                        echo "FAILED ${e}"
+                                        slackSend(botUser: true, channel: 'test', color: 'danger', message: '"Failed at Cloning the Project- basic tools: Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]@Burra Chandu0304"', teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                                        currentBuild.result = 'FAILURE'
+                                        throw e
+                                         }      
+                        }
+                   }
+         }
+          stage (inventory_file_updating) {
+              steps{
+                  script{
+                         try {
+                             sh '''
+                                cat << EOF > inventory
+                                [webservers]
+                                $PRIVATE_IP
+
+                                [all:vars]
+                                ansible_user: ubuntu
+                                '''
+                             slackSend(botUser: true, channel: 'test', color: 'good', message: '"UPDATED REMOTE HOST ADDRESS"' , teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                             }
+                         catch(Exception e){
+                                        echo "FAILED ${e}"
+                                        slackSend(botUser: true, channel: 'test', color: 'danger', message: '"Failed at updating the remote host ip"', teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                                        currentBuild.result = 'FAILURE'
+                                        throw e
+                                         }  
+                   }
+              }
+
+          }
+            stage(docker_installation) {
+             steps {
+                 script{
+                        try{
+                            input message: 'DO YOU WANT TO INSTALL DOCKER (yes/no)'
+                            ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'basic_tools/docker.yaml'
+                            slackSend(botUser: true, channel: 'test', color: 'good', message: '"SUCCESSFULLY INSTALLED DOCKER"' , teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                            }
+                        catch (Exception e){                    
+                                        echo "FAILED ${e}"
+                                        slackSend(botUser: true, channel: 'test', color: 'danger', message: '"Failed to install docker"', teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                                        currentBuild.result = 'ABORTED'
+                                        throw e
+                                         }
+                      }
+                   }
+                }
+            stage(php_installation) {
+             steps {
+                 script{
+                        try{
+                            input message: 'DO YOU WANT TO INSTALL PHP (yes/no)'
+                            ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'basic_tools/php.yaml'
+                            slackSend(botUser: true, channel: 'test', color: 'good', message: '"SUCCESSFULLY INSTALLED PHP"' , teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                           }
+                        catch (Exception e){                    
+                                        echo "FAILED ${e}"
+                                        slackSend(botUser: true, channel: 'test', color: 'danger', message: '"Failed to install php"', teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                                        currentBuild.result = 'ABORTED'
+                                        throw e
+                                         }
+                    }
+                }
+            }
+            stage(node_installation) {
+             steps {
+                 script{
+                        try{
+                            input message: 'DO YOU WANT TO INSTALL NODE (yes/no)'
+                            ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'basic_tools/node.yaml'
+                            slackSend(botUser: true, channel: 'test', color: 'good', message: '"SUCCESSFULLY INSTALLED NODE"' , teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                           }
+                        catch (Exception e){                    
+                                        echo "FAILED ${e}"
+                                        slackSend(botUser: true, channel: 'test', color: 'danger', message: '"Failed to install node"', teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                                        currentBuild.result = 'ABORTED'
+                                        throw e
+                                         }
+                    }
+                }
+            }
+            stage(ngnix_installation) {
+             steps {
+                 script{
+                       try{
+                           input message: 'DO YOU WANT TO INSTALL NGNIX (yes/no)'
+                           ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'inventory', playbook: 'basic_tools/ngnix.yaml'
+                           slackSend(botUser: true, channel: 'test', color: 'good', message: '"SUCCESSFULLY INSTALLED NGINX"' , teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                          }
+                      catch (Exception e){                    
+                                        echo "FAILED ${e}"
+                                        slackSend(botUser: true, channel: 'test', color: 'danger', message: '"Failed to install node"', teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                                        currentBuild.result = 'ABORTED'
+                                        throw e
+                                         }
+                    }
+                }
+            }
+        }
+   }
