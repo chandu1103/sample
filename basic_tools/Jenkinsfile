@@ -10,7 +10,7 @@ pipeline {
             script{
                 try{
                     def cause = currentBuild.getBuildCauses('hudson.model.Cause$UserIdCause')
-                    slackSend (botUser: true, color: 'warning', message: "Cloning the Project- nodejs-Branch-${Branch}: Job '${env.JOB_NAME} ${cause.userName} [${env.BUILD_NUMBER}]' " , channel: "test", teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                    slackSend (botUser: true, color: 'warning', message: '"Cloning the Project- nodejs-Branch-${Branch}: Job '${env.JOB_NAME} ${cause.userName} [${env.BUILD_NUMBER}]"' , channel: "test", teamDomain: 'chandu1607', tokenCredentialId: 'slack')
                     echo "flag: ${params.Branch}"
                     git branch: "${params.Branch}", url: 'https://github.com/chandu1103/sample.git'
                    // git branch: 'ansible', url: 'https://github.com/chandu1103/sample.git'
