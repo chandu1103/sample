@@ -64,6 +64,33 @@ allowed_hosts= ${PRIVATE_IP}
                 }
               }
          }
+        stage (inventory_file_updating) {
+        steps{
+            script{
+                try {
+                    ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'nagios-nrpe/inventory', playbook: 'nagios-nrpe/nrpe.yaml'
+                    slackSend(botUser: true, channel: 'test', color: 'good', message: '"NAGIOS CLIENT IS INSTALLED ON  REMOTE HOST"' , teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                    }
+                catch(Exception e){
+                    echo "FAILED ${e}"
+                    slackSend(botUser: true, channel: 'test', color: 'danger', message: '"Failed to install nagios-client on the remote host"', teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                    currentBuild.result = 'FAILURE'
+                    throw e
+                    }  
+                   }
+            }
+
+        }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     }
 }
 
