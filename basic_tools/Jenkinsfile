@@ -29,9 +29,9 @@ pipeline {
             script{
                 try {
                     sh '''
-                    cat << EOF > inventory
+                    cat << EOF > basic_tools/inventory
                     [webservers]
-                    $env.PRIVATE_IP
+                    ${env.PRIVATE_IP}
 
                     [all:vars]
                     ansible_user: ubuntu
