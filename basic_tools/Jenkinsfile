@@ -79,8 +79,40 @@ pipeline {
                     }
                       }
                    }               
+
+
+    stage(NODE_installation) {
+        steps {
+            script{
+                    if( env.NODE_INPUT == "true" ) {
+                    ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'basic_tools/inventory', playbook: 'basic_tools/node.yaml'
+                            slackSend(botUser: true, channel: 'test', color: 'good', message: '"SUCCESSFULLY INSTALLED NODE"' , teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                            }
+                    else {                    
+                          echo "Node not installed"
+                          slackSend(botUser: true, channel: 'test', color: 'warning', message: '"Failed to install NODE"', teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                         }
+                    }
+                      }
+                   }
                 
-                
+
+    stage(NGINX_installation) {
+        steps {
+            script{
+                    if( env.NGNIX_INPUT == "true" ) {
+                    ansiblePlaybook colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'basic_tools/inventory', playbook: 'basic_tools/ngnix.yaml'
+                            slackSend(botUser: true, channel: 'test', color: 'good', message: '"SUCCESSFULLY INSTALLED NGNIX"' , teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                            }
+                    else {                    
+                          echo "Ngnix not installed"
+                          slackSend(botUser: true, channel: 'test', color: 'warning', message: '"Failed to install NGNIX"', teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                         }
+                    }
+                      }
+                   }
+
+
                 
                 
                 
