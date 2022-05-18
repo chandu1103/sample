@@ -57,10 +57,9 @@ pipeline {
                             slackSend(botUser: true, channel: 'test', color: 'good', message: '"SUCCESSFULLY INSTALLED DOCKER"' , teamDomain: 'chandu1607', tokenCredentialId: 'slack')
                             }
                     else {                    
-                                        echo "FAILED ${e}"
-                                        slackSend(botUser: true, channel: 'test', color: 'danger', message: '"Failed to install docker"', teamDomain: 'chandu1607', tokenCredentialId: 'slack')
-                                        currentBuild.result = 'ABORTED'
-                                         }
+                          echo "Dokcer not installed"
+                          slackSend(botUser: true, channel: 'test', color: 'danger', message: '"Failed to install docker"', teamDomain: 'chandu1607', tokenCredentialId: 'slack')
+                         }
                     }
                       }
                    }
