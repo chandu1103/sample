@@ -31,7 +31,7 @@ pipeline {
                     sh '''
                     cat << EOF > inventory
                     [webservers]
-                    ${PRIVATE_IP}
+                    ${env.PRIVATE_IP}
 
                     [all:vars]
                     ansible_user: ubuntu
